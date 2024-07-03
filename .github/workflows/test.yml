@@ -1,0 +1,30 @@
+# This is a basic workflow to help you get started with Actions
+
+name: test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GAME_BUILD_CONFIG_URL: https://config-dev.gothamsports.com/Configurations/build.json
+      PUBLIC_PLATFORM: lg
+      PUBLIC_ENABLE_LOCATION_OVERRIDE: 'FALSE'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install pnpm
+        run: npm install -g pnpm@9.1.1
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Build project
+        run: |
+          pnpm build
